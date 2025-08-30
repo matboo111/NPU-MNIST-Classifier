@@ -1,11 +1,11 @@
 module mac (
-    input wire CLKEXT,
-    input wire RST_MAC,
-    input wire EN_MAC,
-    input wire [7:0] a,
-    input wire [7:0] b,
-    input wire [7:0] BIAS_IN,
-    output reg [15:0] result,
+    input  wire       CLKEXT,
+    input  wire       RST_MAC,
+    input  wire       EN_MAC,
+    input  wire [7:0] a,
+    input  wire [7:0] b,
+    input  wire [7:0] BIAS_IN,
+    output wire [15:0] result
 );
 
     wire [15:0] out_mult, out_16bit, out_mux;
@@ -16,17 +16,17 @@ module mac (
 
     assign out_mult = A * B;
 
-    m16_bit_adder adder_inst (
-        .A(out_mult),
-        .B(result),
-        .S(out_16bit)
+    m16_bit adder_inst (
+        .a(out_mult),
+        .b(result),
+        .ADD_OUT(out_16bit)
     );
 
     mux #(
         .WIDTH(16),
         .SEL_WIDTH(1)
     ) mux_inst (
-        .data_in_flat({BIAS_IN,out_16bit}),
+        .data_in_flat({{8'b0,BIAS_IN},out_16bit}),
         .sel(RST_MAC),
         .data_out(out_mux)
     );

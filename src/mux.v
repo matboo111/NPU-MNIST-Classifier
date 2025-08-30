@@ -1,6 +1,6 @@
 module mux #(
-    parameter WIDTH = 8,
-    parameter SEL_WIDTH = 2
+    parameter WIDTH,
+    parameter SEL_WIDTH
 )(
     input  wire [WIDTH*(1<<SEL_WIDTH)-1:0] data_in_flat,
     input  wire [SEL_WIDTH-1:0] sel,
