@@ -11,12 +11,12 @@ module PISO_OUT #(
 );
 
     reg [WIDTH-1:0] reg_data [0:NUM_TAPS-1];
-    
+    integer i;
 
     assign DATA_OUT = reg_data[NUM_TAPS-1];
 
     always @(posedge CLKEXT or posedge CLR_PISO_OUT)begin
-        integer i;
+        
         if(CLR_PISO_OUT) begin
             for(i=0; i<NUM_TAPS; i=i+1) begin
                 reg_data[i] <= 0;
