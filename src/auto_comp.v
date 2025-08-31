@@ -12,19 +12,18 @@ module auto_comparator (
 
     always @(posedge CLKEXT or posedge RST_COMP) begin
         if (RST_COMP) begin
-            LARGEST <= 16'h8000;
-            INDEX   <= 0;
-            next_idx<= 1;
+            LARGEST  <= 16'h8000;
+            INDEX    <= 0;
+            next_idx <= 1;
         end else if (EN_COMP && TRIG) begin
-            if ($signed(IN1) > $signed(LARGEST)) begin
+            if ($signed(IN1) > $signed(LARGEST) && $signed(IN1) >= $signed(IN2)) begin
                 LARGEST <= IN1;
                 INDEX   <= next_idx;
-            end
-            if ($signed(IN2) > $signed(LARGEST)) begin
+            end else if ($signed(IN2) > $signed(LARGEST)) begin
                 LARGEST <= IN2;
-                INDEX   <= next_idx + 1;
+                INDEX   <= next_idx;
             end
-            next_idx <= next_idx + 2;
+            next_idx <= next_idx + 1;
         end
     end
 endmodule
