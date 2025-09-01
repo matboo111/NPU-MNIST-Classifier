@@ -9,7 +9,7 @@ module tb_PISO_OUT;
     reg [WIDTH*NUM_TAPS-1:0] DATA_IN;
     wire [WIDTH-1:0] DATA_OUT;
 
-    PISO_OUT #(
+    PISO #(
         .WIDTH(WIDTH),
         .NUM_TAPS(NUM_TAPS)
     ) uut (

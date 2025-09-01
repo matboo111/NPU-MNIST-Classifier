@@ -1,4 +1,4 @@
-module PISO_OUT #(
+module PISO #(
     parameter WIDTH = 8,
     parameter NUM_TAPS = 4
 )(
