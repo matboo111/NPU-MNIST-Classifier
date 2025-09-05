@@ -2,7 +2,7 @@ module ssfr (
     input  wire        CLKEXT,
     input  wire        RST,
     input  wire [7:0]  DA,
-    input  wire [7:0] DB,
+    input  wire [7:0]  DB,
     input  wire        EN_CONFIG,
     output wire [15:0] SSFR
 )
