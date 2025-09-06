@@ -5,7 +5,7 @@ module ssfr (
     input  wire [7:0]  DB,
     input  wire        EN_CONFIG,
     output wire [15:0] SSFR
-)
+);
 
     reg [15:0] ssfr_reg;
     assign SSFR = ssfr_reg; 

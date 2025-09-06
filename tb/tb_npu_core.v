@@ -9,6 +9,7 @@ module tb_npu_core;
     reg        SHIFT_DEB, EN_PISO_DEB, CLR_PISO_DEB;
     reg        RD_EN;
     wire [7:0] DATA_OUT;
+    wire       FULL, EMPTY;
 
     npu_core uut (
         .CLKEXT(CLKEXT),
@@ -23,7 +24,9 @@ module tb_npu_core;
         .SHIFT_DEB(SHIFT_DEB),
         .EN_PISO_DEB(EN_PISO_DEB),
         .CLR_PISO_DEB(CLR_PISO_DEB),
-        .DATA_OUT(DATA_OUT)
+        .DATA_OUT(DATA_OUT),
+        .FULL(FULL),
+        .EMPTY(EMPTY)
     );
 
     // Clock generation

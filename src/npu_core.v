@@ -11,7 +11,9 @@ module npu_core (
     input  wire        SHIFT_DEB,
     input  wire        EN_PISO_DEB,
     input  wire        CLR_PISO_DEB,
-    output wire [7:0]  DATA_OUT
+    output wire [7:0]  DATA_OUT,
+    output wire        FULL,
+    output wire        EMPTY
 );
 
     wire [7:0] DA_OUT;
@@ -50,8 +52,6 @@ module npu_core (
     wire [7:0] DATA_OUT_PISO_OUT;
 
     wire [7:0] DATA_OUT_FIFO;
-    wire       FULL;
-    wire       EMPTY;
 
     wire [15:0] LARGEST;
     wire [7:0]  INDEX;
