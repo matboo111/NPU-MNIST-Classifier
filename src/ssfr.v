@@ -13,7 +13,7 @@ module ssfr (
         if (RST) begin
             ssfr_reg <= 16'b0010_0010_1000_0000;
         end else if (EN_CONFIG) begin
-            ssfr_reg <= {DB, DA};
+            ssfr_reg <= {DA, DB};
         end
     end
 
