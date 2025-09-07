@@ -144,7 +144,7 @@ module npu_core (
             .RST(RST),
             .DATA_IN(RESULT_MAC1),
             .EN_reLU(EN_reLU),
-            .BYPASS_reLU(BYPASS_reLU),
+            .BYPASS_reLU(BYPASS_reLU1),
             .reLU_OUT(reLU_OUT1)
         );
 
@@ -153,7 +153,7 @@ module npu_core (
             .RST(RST),
             .DATA_IN(RESULT_MAC2),
             .EN_reLU(EN_reLU),
-            .BYPASS_reLU(BYPASS_reLU),
+            .BYPASS_reLU(BYPASS_reLU2),
             .reLU_OUT(reLU_OUT2)
         );
 

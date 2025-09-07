@@ -4,7 +4,7 @@ module m16_bit(
     output wire [15:0] ADD_OUT
 );
 
-    wire [16:0] A,B,OUT;
+    wire signed [16:0] A,B,OUT;
     assign A = {a[15], a};
     assign B = {b[15], b};
     assign OUT = A + B;

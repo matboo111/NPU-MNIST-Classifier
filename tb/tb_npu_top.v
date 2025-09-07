@@ -1,6 +1,5 @@
 `timescale 1ns/1ps
 
-// Testbench em Verilog-2001 para npu_top
 // Fluxo: reset → config SSFR → enable FSM → aplicar vetores → ler saídas.
 
 module tb_npu_top;
@@ -56,7 +55,7 @@ module tb_npu_top;
   task apply_reset;
     integer cycles;
     begin
-      cycles = 5;
+      cycles = 1;
       RST_GLO = 1'b1;
       repeat (cycles) @(posedge CLKEXT);
       RST_GLO = 1'b0;
@@ -81,8 +80,8 @@ module tb_npu_top;
     input [7:0] a, b, c, d;
     begin
       DA = a; DB = b; DC = c; DD = d;
-      @(posedge CLKEXT);
-      @(posedge CLKEXT);
+      //@(posedge CLKEXT);
+      //@(posedge CLKEXT);
     end
   endtask
 
@@ -130,38 +129,55 @@ module tb_npu_top;
     // Liga FSM
     EN_FSM = 1'b1;
     @(posedge CLKEXT);
+    EN_FSM = 1'b0;
 
-    // Configura SSFR = 16'h2280 (padrão)
-    cfg_ssfr(8'h22, 8'h80);
+    // Configura SSFR = 16'h2280 (padrão) (binário: 0010_0010_1000_0000))
+    //cfg_ssfr(8'h22, 8'h80);
 
     // Latência inicial
-    repeat (4) @(posedge CLKEXT);
+    //repeat (4) @(posedge CLKEXT);
 
     // Vetores de entrada
-    push_quad(8'd10, 8'd2, 8'd3, 8'd4);
-    push_quad(8'd20, 8'd5, 8'd6, 8'd7);
-    push_quad(8'd30, 8'd8, 8'd9, 8'd10);
-    push_quad(8'd40, 8'd11, 8'd12, 8'd13);
+    @(negedge CLKEXT);
+    push_quad(8'hD8, 8'h00, 8'hD8, 8'h08);
+    @(negedge CLKEXT);
+    push_quad(8'hD0, 8'hD0, 8'hD0, 8'hD0);
+    @(negedge CLKEXT);
+    push_quad(8'hD1, 8'hD1, 8'hD1, 8'hD1);
+    @(negedge CLKEXT);
+    push_quad(8'hD2, 8'hD2, 8'hD2, 8'hD2);
+    @(negedge CLKEXT);
+    push_quad(8'hD3, 8'hD3, 8'hD3, 8'hD3);
+    @(negedge CLKEXT);
+    push_quad(8'hD4, 8'hD4, 8'hD4, 8'hD4);
+    @(negedge CLKEXT);
+    push_quad(8'hD5, 8'hD5, 8'hD5, 8'hD5);
+    @(negedge CLKEXT);
+    push_quad(8'hD6, 8'hD6, 8'hD6, 8'hD6);
+    @(negedge CLKEXT);
+    push_quad(8'hD7, 8'hD7, 8'hD7, 8'hD7);
+    repeat (16) @(posedge CLKEXT);
 
-    // Aguarda e faz leituras
+    /* Aguarda e faz leituras
     repeat (8) @(posedge CLKEXT);
     repeat (8) begin
       pop_one();
       @(posedge CLKEXT);
-    end
+    end */
 
     // Fim
-    repeat (20) @(posedge CLKEXT);
+    //repeat (20) @(posedge CLKEXT);
     $display("[TB] Fim da simulação.");
     $finish;
   end
 
-  // Monitor
+  /* Monitor
   always @(posedge CLKEXT) begin
     if (RD_EN && !EMPTY) begin
       $display("%0t ns : RD -> D_OUT=0x%02x (FULL=%0b, EMPTY=%0b)",
                $time, D_OUT, FULL, EMPTY);
     end
   end
+*/
 
 endmodule

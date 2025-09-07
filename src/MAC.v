@@ -8,11 +8,11 @@ module mac (
     output wire [15:0] result
 );
 
-    wire [15:0] out_mult, out_16bit, out_mux;
-    wire [7:0] A, B;
+    wire signed [15:0] out_mult, out_16bit, out_mux;
+    wire signed [7:0] A, B;
 
-    assign A = EN_MAC ? a : 8'b0;
-    assign B = EN_MAC ? b : 8'b0;
+    assign A = EN_MAC ? $signed(a) : 8'b0;
+    assign B = EN_MAC ? $signed(b) : 8'b0;
 
     assign out_mult = A * B;
 
