@@ -70,8 +70,10 @@ module tb_npu_top;
       DA = ssfr_hi;
       DB = ssfr_lo;
       EN_CONFIG = 1'b1;
+      EN_FSM = 1'b1;
       @(posedge CLKEXT);
       EN_CONFIG = 1'b0;
+      EN_FSM = 1'b0;
       @(posedge CLKEXT);
     end
   endtask
@@ -105,12 +107,6 @@ module tb_npu_top;
     end
   endtask
 
-  // Dump waves
-  initial begin
-    $dumpfile("tb_npu_top.vcd");
-    $dumpvars(0, tb_npu_top);
-  end
-
   // Sequência principal
   initial begin
     // Defaults
@@ -123,19 +119,13 @@ module tb_npu_top;
     SHIFT_DEB    = 1'b0;
     DA = 0; DB = 0; DC = 0; DD = 0;
 
+//----------------------------- PISO_OUT(DEFAULT) -----------------------------
     // Reset
     apply_reset;
-
-    // Liga FSM
+     // Liga FSM
     EN_FSM = 1'b1;
     @(posedge CLKEXT);
     EN_FSM = 1'b0;
-
-    // Configura SSFR = 16'h2280 (padrão) (binário: 0010_0010_1000_0000))
-    //cfg_ssfr(8'h22, 8'h80);
-
-    // Latência inicial
-    //repeat (4) @(posedge CLKEXT);
 
     // Vetores de entrada
     @(negedge CLKEXT);
@@ -156,17 +146,63 @@ module tb_npu_top;
     push_quad(8'hD6, 8'hD6, 8'hD6, 8'hD6);
     @(negedge CLKEXT);
     push_quad(8'hD7, 8'hD7, 8'hD7, 8'hD7);
+    //aguarda processaimento
     repeat (16) @(posedge CLKEXT);
 
-    /* Aguarda e faz leituras
-    repeat (8) @(posedge CLKEXT);
-    repeat (8) begin
-      pop_one();
-      @(posedge CLKEXT);
-    end */
+//----------------------------- FIFO_OUT -----------------------------
+    apply_reset;
+    cfg_ssfr(8'b0000_0011, 8'b0000_0000); //SEL = 000(FIFO), FIFO = ENABLE, RESET_FIFO = DISABLE
 
-    // Fim
-    //repeat (20) @(posedge CLKEXT);
+    // Vetores de entrada
+    @(negedge CLKEXT);
+    push_quad(8'hD8, 8'h00, 8'hD8, 8'h08);
+    @(negedge CLKEXT);
+    push_quad(8'hD0, 8'hD0, 8'hD0, 8'hD0);
+    @(negedge CLKEXT);
+    push_quad(8'hD1, 8'hD1, 8'hD1, 8'hD1);
+    RD_EN = 1'b1;
+    @(negedge CLKEXT);
+    push_quad(8'hD2, 8'hD2, 8'hD2, 8'hD2);
+    @(negedge CLKEXT);
+    push_quad(8'hD3, 8'hD3, 8'hD3, 8'hD3);
+    @(negedge CLKEXT);
+    push_quad(8'hD4, 8'hD4, 8'hD4, 8'hD4);
+    @(negedge CLKEXT);
+    push_quad(8'hD5, 8'hD5, 8'hD5, 8'hD5);
+    RD_EN = 1'b0;
+    @(negedge CLKEXT);
+    push_quad(8'hD6, 8'hD6, 8'hD6, 8'hD6);
+    @(negedge CLKEXT);
+    push_quad(8'hD7, 8'hD7, 8'hD7, 8'hD7);
+    //aguarda processamento
+    repeat (16) @(posedge CLKEXT);
+
+    //----------------------------- AUTO_COMP -----------------------------
+    apply_reset;
+    cfg_ssfr(8'b0100_0100, 8'b1000_0000); //SEL = 010(AUTO_COMP), EN_COMP = ENABLE, RESET_COMP = DISABLE
+
+    // Vetores de entrada
+    @(negedge CLKEXT);
+    push_quad(8'hD8, 8'h00, 8'hD8, 8'h08);
+    @(negedge CLKEXT);
+    push_quad(8'hD0, 8'hD0, 8'hD0, 8'hD0);
+    @(negedge CLKEXT);
+    push_quad(8'hD1, 8'hD1, 8'hD1, 8'hD1);
+    @(negedge CLKEXT);
+    push_quad(8'hD2, 8'hD2, 8'hD2, 8'hD2);
+    @(negedge CLKEXT);
+    push_quad(8'hD3, 8'hD3, 8'hD3, 8'hD3);
+    @(negedge CLKEXT);
+    push_quad(8'hD4, 8'hD4, 8'hD4, 8'hD4);
+    @(negedge CLKEXT);
+    push_quad(8'hD5, 8'hD5, 8'hD5, 8'hD5);
+    @(negedge CLKEXT);
+    push_quad(8'hD6, 8'hD6, 8'hD6, 8'hD6);
+    @(negedge CLKEXT);
+    push_quad(8'hD7, 8'hD7, 8'hD7, 8'hD7);
+    //aguarda processamento
+    repeat (16) @(posedge CLKEXT);
+
     $display("[TB] Fim da simulação.");
     $finish;
   end
